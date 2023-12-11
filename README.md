@@ -1,0 +1,2 @@
+# TrainingApp
+Pet project
