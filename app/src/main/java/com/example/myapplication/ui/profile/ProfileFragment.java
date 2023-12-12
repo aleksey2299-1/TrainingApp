@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment implements ContentRecyclerAdapter.
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        contentList = view.findViewById(R.id.contentList);
+        contentList = view.findViewById(R.id.content_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(contentList.getContext(),
                 linearLayoutManager.getOrientation());
@@ -64,7 +64,6 @@ public class ProfileFragment extends Fragment implements ContentRecyclerAdapter.
         adapter.open();
 
         ArrayList<User> users = adapter.getUsers();
-        System.out.println(users);
 
         arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, users);
         contentList.setAdapter(new ContentRecyclerAdapter(users, this));

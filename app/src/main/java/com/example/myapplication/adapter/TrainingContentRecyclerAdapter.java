@@ -11,35 +11,36 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.training.Training;
 import com.example.myapplication.user.User;
 
 import java.util.ArrayList;
 
-public class ContentRecyclerAdapter extends RecyclerView.Adapter<ContentRecyclerAdapter.ViewHolder> {
-    private ArrayList<User> mArrayList;
+public class TrainingContentRecyclerAdapter extends RecyclerView.Adapter<TrainingContentRecyclerAdapter.ViewHolder> {
+    private ArrayList<Training> mArrayList;
     private OnClickListener mOnClickListener;
-    public ContentRecyclerAdapter(ArrayList<User> arrayList, OnClickListener onClickListener){
+    public TrainingContentRecyclerAdapter(ArrayList<Training> arrayList, OnClickListener onClickListener){
         this.mArrayList = arrayList;
         this.mOnClickListener = onClickListener;
     }
 
     @NonNull
     @Override
-    public ContentRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TrainingContentRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contentView = inflater.inflate(R.layout.content, parent, false);
+        View contentView = inflater.inflate(R.layout.training_content, parent, false);
         ViewHolder viewHolder = new ViewHolder(contentView, mOnClickListener);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContentRecyclerAdapter.ViewHolder holder, int position) {
-        User arrayList = mArrayList.get(position);
-        TextView textViewName = holder.first_name;
-        TextView textViewLastName = holder.last_name;
-        textViewName.setText(arrayList.getUsername());
-        textViewLastName.setText(arrayList.getLastName());
+    public void onBindViewHolder(@NonNull TrainingContentRecyclerAdapter.ViewHolder holder, int position) {
+        Training arrayList = mArrayList.get(position);
+        TextView textViewName = holder.name;
+        TextView textViewTime = holder.time;
+        textViewName.setText(arrayList.getName());
+        textViewTime.setText(String.valueOf(arrayList.getTime()));
     }
 
     @Override
@@ -48,12 +49,12 @@ public class ContentRecyclerAdapter extends RecyclerView.Adapter<ContentRecycler
     }
     // Создаем View для каждого объекта из массива
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView first_name, last_name;
+        public TextView name, time;
         OnClickListener onClickListener;
         public ViewHolder(View itemView, OnClickListener onClickListener){
             super(itemView);
-            first_name = (TextView) itemView.findViewById(R.id.first_name);
-            last_name = (TextView) itemView.findViewById(R.id.last_name);
+            name = (TextView) itemView.findViewById(R.id.name);
+            time = (TextView) itemView.findViewById(R.id.time);
             this.onClickListener = onClickListener;
             itemView.setOnClickListener(this); // весь View кликабельный
         }
@@ -82,3 +83,4 @@ public class ContentRecyclerAdapter extends RecyclerView.Adapter<ContentRecycler
         void onClick(int position);
     }
 }
+

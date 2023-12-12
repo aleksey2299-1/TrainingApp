@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="50dp"
     tools:context=".ui.profile.ProfileFragment">
 
     <LinearLayout
@@ -42,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintTop_toBottomOf="@id/userData"
-                    app:layout_constraintBottom_toBottomOf="@id/contentList"
+                    app:layout_constraintBottom_toBottomOf="@id/content_list"
                     app:layout_constraintLeft_toRightOf="@id/userPic"
                     app:layout_constraintRight_toRightOf="parent">
                     <TextView
@@ -56,7 +57,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/contentList"
+            android:id="@+id/content_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="60dp"/>

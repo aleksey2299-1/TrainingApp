@@ -16,6 +16,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LAST_NAME = "last_name";
     public static final String COLUMN_PASSWORD = "password";
 
+    static final String TABLE_TRAININGS = "trainings";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_TIME = "time";
+    public static final String COLUMN_DESC = "description";
+    public static final String COLUMN_IMAGE = "image";
+    public static final String COLUMN_AUTHOR = "author";
+
 
 
     public DatabaseHelper(Context context) {
@@ -30,15 +37,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " TEXT, " + COLUMN_EMAIL + " TEXT, " + COLUMN_FIRST_NAME
                 + " TEXT, " + COLUMN_LAST_NAME + " TEXT, " + COLUMN_PASSWORD
                 + " TEXT);");
+        db.execSQL("CREATE TABLE " + TABLE_TRAININGS + " (" + COLUMN_ID
+                + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_NAME
+                + " TEXT, " + COLUMN_TIME + " INTEGER, " + COLUMN_DESC
+                + " TEXT, " + COLUMN_IMAGE + " TEXT, " + COLUMN_AUTHOR
+                + " INTEGER, FOREIGN KEY (" + COLUMN_AUTHOR + ") REFERENCES " + TABLE_USERS
+                + "(" + COLUMN_ID + "))");
         // добавление начальных данных
         db.execSQL("INSERT INTO "+ TABLE_USERS +" (" + COLUMN_USERNAME
                 + ", " + COLUMN_EMAIL + ", " + COLUMN_FIRST_NAME + ", "
                 + COLUMN_LAST_NAME + ", " + COLUMN_PASSWORD
                 + ") VALUES ('tomsmith', 'tomsmith@gmail.com', 'Том', 'Смит', 'password');");
+        db.execSQL("INSERT INTO "+ TABLE_TRAININGS +" (" + COLUMN_NAME
+                + ", " + COLUMN_TIME + ", " + COLUMN_DESC + ", "
+                + COLUMN_IMAGE + ", " + COLUMN_AUTHOR
+                + ") VALUES ('run', '30', 'just run', 'empty', '1');");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,  int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRAININGS);
         onCreate(db);
     }
 }

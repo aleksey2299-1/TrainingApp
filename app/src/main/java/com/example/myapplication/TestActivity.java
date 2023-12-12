@@ -67,9 +67,9 @@ public class TestActivity extends AppCompatActivity {
 
         adapter.open();
         if (userId > 0) {
-            adapter.update(user);
+            adapter.updateUser(user);
         } else {
-            adapter.insert(user);
+            adapter.insertUser(user);
         }
         adapter.close();
         onBackPressed();
@@ -77,7 +77,7 @@ public class TestActivity extends AppCompatActivity {
     public void delete(View view){
 
         adapter.open();
-        adapter.delete(userId);
+        adapter.deleteUser(userId);
         adapter.close();
         onBackPressed();
     }
