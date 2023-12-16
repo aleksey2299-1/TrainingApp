@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.example.myapplication.adapter.ContentRecyclerAdapter;
+import com.example.myapplication.user.ui.login.LoginActivity;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -31,8 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar bar = findViewById(R.id.upToolbar);
         Button profileButton = findViewById(R.id.profileButton);
+        Button loginButton = findViewById(R.id.loginButton);
         BottomNavigationView navView = findViewById(R.id.bottom_nav);
         setSupportActionBar(bar);
+
+        loginButton.setOnClickListener( v -> {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        });
 
         profileButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, TestActivity.class);
