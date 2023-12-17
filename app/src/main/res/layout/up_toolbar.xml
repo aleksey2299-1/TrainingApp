@@ -15,12 +15,13 @@
         android:layout_gravity="end"
         android:text="Профиль"
         android:textSize="10dp"/>
+
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
         android:text="Войти"
-        android:textSize="10dp"
-        android:layout_marginEnd="5dp"/>
+        android:layout_gravity="end"
+        android:layout_marginEnd="5dp" />
+
 </androidx.appcompat.widget.Toolbar>

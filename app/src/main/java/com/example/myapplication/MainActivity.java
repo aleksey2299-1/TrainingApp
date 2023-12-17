@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.example.myapplication.adapter.ContentRecyclerAdapter;
-import com.example.myapplication.user.ui.login.LoginActivity;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar bar = findViewById(R.id.upToolbar);
         Button profileButton = findViewById(R.id.profileButton);
-        Button loginButton = findViewById(R.id.loginButton);
+        Button loginButton = findViewById(R.id.login);
         BottomNavigationView navView = findViewById(R.id.bottom_nav);
         setSupportActionBar(bar);
 

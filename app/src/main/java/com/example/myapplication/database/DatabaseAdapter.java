@@ -176,4 +176,33 @@ public class DatabaseAdapter {
         cv.put(DatabaseHelper.COLUMN_AUTHOR, training.getAuthor());
         return database.update(DatabaseHelper.TABLE_TRAININGS, cv, whereClause, null);
     }
+
+    public Boolean checkUsername(String username){
+        SQLiteDatabase myDatabase = dbHelper.getWritableDatabase();
+        Cursor cursor = myDatabase.rawQuery("SELECT * FROM users WHERE username = ?", new String[]{username});
+        if(cursor.getCount() > 0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public Boolean checkEmail(String email){
+        SQLiteDatabase myDatabase = dbHelper.getWritableDatabase();
+        Cursor cursor = myDatabase.rawQuery("SELECT * FROM users WHERE email = ?", new String[]{email});
+        if(cursor.getCount() > 0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public Boolean checkUsernamePassword(String username, String password){
+        SQLiteDatabase myDatabase = dbHelper.getWritableDatabase();
+        Cursor cursor = myDatabase.rawQuery("SELECT * FROM users WHERE username = ? AND password = ?", new String[]{username, password});
+        if (cursor.getCount() > 0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
