@@ -28,8 +28,11 @@ public class LoginActivity extends AppCompatActivity {
                 Boolean checkCredentials = adapter.checkUsernamePassword(username, password);
                 if(checkCredentials == true){
                     Toast.makeText(LoginActivity.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent  = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
+                    Intent intent  = new Intent();
+                    System.out.println(username);
+                    intent.putExtra(MainActivity.USERNAME, username);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }else{
                     Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                 }

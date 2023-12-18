@@ -1,13 +1,25 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.adapter.ContentRecyclerAdapter;
+import com.example.myapplication.database.DatabaseAdapter;
+import com.example.myapplication.user.User;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,8 +31,27 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.myapplication.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-
     private ActivityMainBinding binding;
+    private ImageButton profileButton;
+    private Button loginButton;
+    static final String USERNAME="USERNAME";
+    private User user;
+    private DatabaseAdapter adapter;
+    ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            TextView userText = binding.upToolbar.userText;
+            if (result.getResultCode() == Activity.RESULT_OK){
+                System.out.println("OK");
+                Intent intent = result.getData();
+                String username = intent.getStringExtra(USERNAME);
+                adapter.open();
+                user = adapter.getUserByUsername(username);
+                adapter.close();
+                userText.setText("Здравствуйте, " + user.getUsername());
+            }
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,19 +60,21 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Toolbar bar = findViewById(R.id.upToolbar);
-        Button profileButton = findViewById(R.id.profileButton);
-        Button loginButton = findViewById(R.id.login);
+        adapter = new DatabaseAdapter(this);
+        Toolbar bar = binding.upToolbar.upToolbar;
+        profileButton = binding.upToolbar.profileButton;
+        loginButton = binding.upToolbar.login;
         BottomNavigationView navView = findViewById(R.id.bottom_nav);
         setSupportActionBar(bar);
 
         loginButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            mStartForResult.launch(intent);
         });
 
         profileButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, TestActivity.class);
+            intent.putExtra("id", user.getId());
             startActivity(intent);
         });
         // Passing each menu ID as a set of Ids because each
@@ -53,4 +86,15 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(user!=null) {
+            loginButton.setVisibility(View.INVISIBLE);
+            profileButton.setVisibility(View.VISIBLE);
+        }else {
+            loginButton.setVisibility(View.VISIBLE);
+            profileButton.setVisibility(View.INVISIBLE);
+        }
+    }
 }

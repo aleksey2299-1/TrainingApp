@@ -8,13 +8,20 @@
     android:layout_height="?attr/actionBarSize"
     app:layout_scrollFlags="scroll|enterAlways"
     app:title="Your info">
-    <Button
+    <ImageButton
         android:id="@+id/profileButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="Профиль"
-        android:textSize="10dp"/>
+        android:src="@drawable/person_gray"
+        android:background="@null"/>
+
+    <TextView
+        android:id="@+id/userText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textSize="10dp" />
 
     <Button
         android:id="@+id/login"

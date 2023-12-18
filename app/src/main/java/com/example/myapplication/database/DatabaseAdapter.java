@@ -72,6 +72,22 @@ public class DatabaseAdapter {
         return user;
     }
 
+    public User getUserByUsername(String username){
+        User user = null;
+        String query = String.format("SELECT * FROM %s WHERE %s=?",DatabaseHelper.TABLE_USERS, DatabaseHelper.COLUMN_USERNAME);
+        Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(username)});
+        if(cursor.moveToFirst()){
+            Long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+            String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
+            String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
+            String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
+            String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
+            user = new User(id, username, email, firstName, lastName, password);
+        }
+        cursor.close();
+        return user;
+    }
+
     public long insertUser(User user){
 
         ContentValues cv = new ContentValues();

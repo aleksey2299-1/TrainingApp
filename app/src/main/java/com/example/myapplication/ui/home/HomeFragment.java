@@ -63,7 +63,6 @@ public class HomeFragment extends Fragment implements TrainingContentRecyclerAda
         adapter.open();
 
         ArrayList<Training> trainings = adapter.getTrainings();
-        System.out.println(trainings);
 
         arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, trainings);
         recyclerView.setAdapter(new TrainingContentRecyclerAdapter(trainings, this));
