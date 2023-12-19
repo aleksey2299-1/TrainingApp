@@ -5,10 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.example.myapplication.training.Training;
 import com.example.myapplication.user.User;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class DatabaseAdapter {
@@ -130,11 +135,13 @@ public class DatabaseAdapter {
         ArrayList<Training> trainings = new ArrayList<>();
         Cursor cursor = getAllTrainingEntries();
         while (cursor.moveToNext()){
+            Bitmap image = null;
             int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
             String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
             int time = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME));
             String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
-            String image = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
             int author = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_AUTHOR));
             trainings.add(new Training(id, name, time, desc, image, author));
         }
@@ -151,10 +158,12 @@ public class DatabaseAdapter {
         String query = String.format("SELECT * FROM %s WHERE %s=?",DatabaseHelper.TABLE_TRAININGS, DatabaseHelper.COLUMN_ID);
         Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(id)});
         if(cursor.moveToFirst()){
+            Bitmap image = null;
             String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
             int time = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME));
             String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
-            String image = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
             int author = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_AUTHOR));
             training = new Training(id, name, time, desc, image, author);
         }
@@ -165,10 +174,15 @@ public class DatabaseAdapter {
     public long insertTraining(Training training){
 
         ContentValues cv = new ContentValues();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        training.getImage().compress(Bitmap.CompressFormat.PNG, 100, out);
+        byte[] buffer = out.toByteArray();
+
         cv.put(DatabaseHelper.COLUMN_NAME, training.getName());
         cv.put(DatabaseHelper.COLUMN_TIME, training.getTime());
         cv.put(DatabaseHelper.COLUMN_DESC, training.getDesc());
-        cv.put(DatabaseHelper.COLUMN_IMAGE, training.getImage());
+        cv.put(DatabaseHelper.COLUMN_IMAGE, buffer);
         cv.put(DatabaseHelper.COLUMN_AUTHOR, training.getAuthor());
 
         return  database.insert(DatabaseHelper.TABLE_TRAININGS, null, cv);
@@ -185,10 +199,15 @@ public class DatabaseAdapter {
 
         String whereClause = DatabaseHelper.COLUMN_ID + "=" + training.getId();
         ContentValues cv = new ContentValues();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        training.getImage().compress(Bitmap.CompressFormat.PNG, 100, out);
+        byte[] buffer = out.toByteArray();
+
         cv.put(DatabaseHelper.COLUMN_NAME, training.getName());
         cv.put(DatabaseHelper.COLUMN_TIME, training.getTime());
         cv.put(DatabaseHelper.COLUMN_DESC, training.getDesc());
-        cv.put(DatabaseHelper.COLUMN_IMAGE, training.getImage());
+        cv.put(DatabaseHelper.COLUMN_IMAGE, buffer);
         cv.put(DatabaseHelper.COLUMN_AUTHOR, training.getAuthor());
         return database.update(DatabaseHelper.TABLE_TRAININGS, cv, whereClause, null);
     }

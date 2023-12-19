@@ -7,7 +7,7 @@
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:id="@+id/user_pic"
+        android:id="@+id/training_pic"
         android:src="@drawable/baseline_sports_martial_arts_24"/>
     <LinearLayout
         android:layout_width="match_parent"

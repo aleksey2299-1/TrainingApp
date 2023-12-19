@@ -1,42 +1,87 @@
 package com.example.myapplication;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.myapplication.database.DatabaseAdapter;
+import com.example.myapplication.databinding.ActivityTrainingBinding;
 import com.example.myapplication.training.Training;
-import com.example.myapplication.user.User;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class TrainingActivity extends AppCompatActivity {
 
+    ActivityTrainingBinding binding;
     private EditText nameBox;
     private EditText timeBox;
     private EditText descBox;
     private EditText authorBox;
-    private ImageView image;
+    private ImageView imageView;
     private Button delButton;
     private Button pickImage;
     private DatabaseAdapter adapter;
     private long trainingId=0;
+    Bitmap bitmap;
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+        @Override
+        public void onActivityResult(Uri uri) {
+            InputStream inputStream = null;
+            try {
+                inputStream = getContentResolver().openInputStream(uri);
+                bitmap = BitmapFactory.decodeStream(inputStream);
+                binding.image.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                Toast.makeText(TrainingActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+            }
+        });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_training);
+        binding = ActivityTrainingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        nameBox = findViewById(R.id.name);
-        timeBox = findViewById(R.id.time);
-        descBox = findViewById(R.id.desc);
-        authorBox = findViewById(R.id.author);
-        image = findViewById(R.id.image);
-        delButton = findViewById(R.id.deleteButton);
+        nameBox = binding.name;
+        timeBox = binding.time;
+        descBox = binding.desc;
+        authorBox = binding.author;
+        imageView = binding.image;
+        delButton = binding.deleteButton;
         adapter = new DatabaseAdapter(this);
-        pickImage = findViewById(R.id.pickImage);
+        pickImage = binding.pickImage;
+
+        binding.rotateLeft.setOnClickListener( v -> {
+            Bitmap bit = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+            Matrix matrix = new Matrix();
+            matrix.postRotate(-90);
+            bitmap = Bitmap.createBitmap(bit, 0, 0, bit.getWidth(), bit.getHeight(), matrix, true);
+            imageView.setImageBitmap(bitmap);
+        });
+
+        binding.rotateRight.setOnClickListener( v -> {
+            Bitmap bit = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            bitmap = Bitmap.createBitmap(bit, 0, 0, bit.getWidth(), bit.getHeight(), matrix, true);
+            imageView.setImageBitmap(bitmap);
+        });
 
 
         Bundle extras = getIntent().getExtras();
@@ -52,16 +97,14 @@ public class TrainingActivity extends AppCompatActivity {
             timeBox.setText(String.valueOf(training.getTime()));
             descBox.setText(training.getDesc());
             authorBox.setText(String.valueOf(training.getAuthor()));
-            //image.setImageURI(user.getPassword());
+            imageView.setImageBitmap(training.getImage());
             adapter.close();
         } else {
             // скрываем кнопку удаления
             delButton.setVisibility(View.GONE);
         }
-        pickImage.setOnClickListener( v -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivity(intent);
+        pickImage.setOnClickListener(v -> {
+            mGetContent.launch("image/*");
         });
     }
 
@@ -71,8 +114,9 @@ public class TrainingActivity extends AppCompatActivity {
         int time = Integer.parseInt(timeBox.getText().toString());
         String desc = descBox.getText().toString();
         long author = Long.parseLong(authorBox.getText().toString());
-        //String image = image.getBytes().toString();
-        Training training = new Training(trainingId, name, time, desc, "Empty", author);
+        Bitmap image = bitmap;
+        System.out.println(image);
+        Training training = new Training(trainingId, name, time, desc, image, author);
 
         adapter.open();
         if (trainingId > 0) {

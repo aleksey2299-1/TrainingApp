@@ -1,13 +1,15 @@
 package com.example.myapplication.training;
 
+import android.graphics.Bitmap;
+
 public class Training {
     private long id;
     private String name;
     private int time;
     private String desc;
-    private String image;
+    private Bitmap image;
     private long author;
-    public Training(long id, String name, int time, String desc, String image, long author){
+    public Training(long id, String name, int time, String desc, Bitmap image, long author){
         this.id = id;
         this.name = name;
         this.time = time;
@@ -36,10 +38,10 @@ public class Training {
     public String getDesc(){
         return desc;
     }
-    public void setImage(String image){
+    public void setImage(Bitmap image){
         this.image = image;
     }
-    public String getImage(){
+    public Bitmap getImage(){
         return image;
     }
     public void setAuthor(long author){

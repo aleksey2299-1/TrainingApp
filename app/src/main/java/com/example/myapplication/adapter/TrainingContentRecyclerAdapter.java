@@ -2,9 +2,11 @@ package com.example.myapplication.adapter;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,8 +41,11 @@ public class TrainingContentRecyclerAdapter extends RecyclerView.Adapter<Trainin
         Training arrayList = mArrayList.get(position);
         TextView textViewName = holder.name;
         TextView textViewTime = holder.time;
+        ImageView imageViewTraining = holder.image;
         textViewName.setText(arrayList.getName());
         textViewTime.setText(String.valueOf(arrayList.getTime()));
+        System.out.println(arrayList.getImage());
+        imageViewTraining.setImageBitmap(arrayList.getImage());
     }
 
     @Override
@@ -50,11 +55,13 @@ public class TrainingContentRecyclerAdapter extends RecyclerView.Adapter<Trainin
     // Создаем View для каждого объекта из массива
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView name, time;
+        public ImageView image;
         OnClickListener onClickListener;
         public ViewHolder(View itemView, OnClickListener onClickListener){
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.name);
             time = (TextView) itemView.findViewById(R.id.time);
+            image = (ImageView) itemView.findViewById(R.id.training_pic);
             this.onClickListener = onClickListener;
             itemView.setOnClickListener(this); // весь View кликабельный
         }
