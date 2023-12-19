@@ -1,10 +1,6 @@
 package com.example.myapplication.ui.profile;
 
-import androidx.lifecycle.ViewModelProvider;
-
-import android.content.Context;
 import android.content.Intent;
-import android.media.browse.MediaBrowser;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,10 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.TestActivity;
@@ -29,10 +22,6 @@ import com.example.myapplication.database.DatabaseAdapter;
 import com.example.myapplication.user.User;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 public class ProfileFragment extends Fragment implements ContentRecyclerAdapter.OnClickListener{
 

@@ -16,15 +16,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.R;
-import com.example.myapplication.TestActivity;
 import com.example.myapplication.TrainingActivity;
-import com.example.myapplication.adapter.ContentRecyclerAdapter;
 import com.example.myapplication.adapter.TrainingContentRecyclerAdapter;
 import com.example.myapplication.database.DatabaseAdapter;
 import com.example.myapplication.databinding.FragmentHomeBinding;
 import com.example.myapplication.training.Training;
-import com.example.myapplication.user.User;
 
 import java.util.ArrayList;
 

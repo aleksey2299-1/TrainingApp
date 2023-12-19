@@ -67,7 +67,7 @@
         android:id="@+id/image"
         android:layout_width="0dp"
         android:layout_height="300dp"
-        android:hint="Ваше изображение"
+        android:src="@drawable/baseline_sports_martial_arts_24"
         app:layout_constraintTop_toBottomOf="@+id/saveButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

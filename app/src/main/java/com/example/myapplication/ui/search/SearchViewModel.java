@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.R;
-
 public class SearchViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;

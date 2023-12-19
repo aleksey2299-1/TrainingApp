@@ -1,7 +1,5 @@
 package com.example.myapplication.user;
 
-import android.provider.ContactsContract;
-
 import java.io.Serializable;
 
 public class User implements Serializable {

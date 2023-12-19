@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
-import android.view.View;
 
 import com.example.myapplication.database.DatabaseAdapter;
 import com.example.myapplication.databinding.ActivitySignupBinding;

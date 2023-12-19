@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
                     System.out.println(username);
                     intent.putExtra(MainActivity.USERNAME, username);
                     setResult(RESULT_OK, intent);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                 }else{
                     Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
