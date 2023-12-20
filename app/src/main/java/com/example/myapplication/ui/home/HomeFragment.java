@@ -21,6 +21,7 @@ import com.example.myapplication.adapter.TrainingContentRecyclerAdapter;
 import com.example.myapplication.database.DatabaseAdapter;
 import com.example.myapplication.databinding.FragmentHomeBinding;
 import com.example.myapplication.training.Training;
+import com.example.myapplication.user.UserViewModel;
 
 import java.util.ArrayList;
 
@@ -28,11 +29,13 @@ public class HomeFragment extends Fragment implements TrainingContentRecyclerAda
 
     private RecyclerView recyclerView;
     private FragmentHomeBinding binding;
+    private UserViewModel userViewModel;
     ArrayAdapter<Training> arrayAdapter;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -44,9 +47,10 @@ public class HomeFragment extends Fragment implements TrainingContentRecyclerAda
         recyclerView.setLayoutManager(linearLayoutManager);
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        Button button = binding.addTraining;
-        button.setOnClickListener( v -> {
+        Button buttonAddTraining = binding.addTraining;
+        buttonAddTraining.setOnClickListener( v -> {
             Intent intent = new Intent(this.getActivity(), TrainingActivity.class);
+            intent.putExtra("user_id", userViewModel.getLoggedUser().getValue().getId());
             startActivity(intent);
         });
         return root;
@@ -71,6 +75,7 @@ public class HomeFragment extends Fragment implements TrainingContentRecyclerAda
         if (training != null) {
             Intent intent = new Intent(this.getActivity(), TrainingActivity.class);
             intent.putExtra("id", training.getId());
+            intent.putExtra("user_id", userViewModel.getLoggedUser().getValue().getId());
             startActivity(intent);
         }
     }

@@ -10,7 +10,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.myapplication.database.DatabaseAdapter;
+import com.example.myapplication.ui.home.HomeFragment;
 import com.example.myapplication.user.User;
+import com.example.myapplication.user.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.result.ActivityResult;
@@ -19,6 +21,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -33,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton profileButton;
     private Button loginButton;
     static final String USERNAME="USERNAME";
-    private User user;
+    public static User user;
     private DatabaseAdapter adapter;
+    private UserViewModel userViewModel;
     ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -55,9 +60,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        user = userViewModel.getLoggedUser().getValue();
+        if(user!=null) {
+            System.out.println(user.getUsername());
+        }
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        //for large images
         try {
             Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
             field.setAccessible(true);
@@ -98,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         if(user!=null) {
             loginButton.setVisibility(View.INVISIBLE);
             profileButton.setVisibility(View.VISIBLE);
+            userViewModel.loggedUser(user);
         }else {
             loginButton.setVisibility(View.VISIBLE);
             profileButton.setVisibility(View.INVISIBLE);
