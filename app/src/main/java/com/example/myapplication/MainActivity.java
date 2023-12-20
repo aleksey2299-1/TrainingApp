@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.myapplication.database.DatabaseAdapter;
-import com.example.myapplication.ui.home.HomeFragment;
 import com.example.myapplication.user.User;
 import com.example.myapplication.user.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,7 +20,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -61,10 +59,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        user = userViewModel.getLoggedUser().getValue();
-        if(user!=null) {
-            System.out.println(user.getUsername());
-        }
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

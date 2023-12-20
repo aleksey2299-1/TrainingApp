@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class UserViewModel extends ViewModel {
-    private final MutableLiveData<User> loggedUser = new MutableLiveData<User>();
+    private final MutableLiveData<User> loggedUser = new MutableLiveData<>();
     public void loggedUser(User user) {
         loggedUser.setValue(user);
     }

@@ -4,18 +4,14 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +19,6 @@ import android.widget.Toast;
 import com.example.myapplication.database.DatabaseAdapter;
 import com.example.myapplication.databinding.ActivityTrainingBinding;
 import com.example.myapplication.training.Training;
-import com.example.myapplication.user.UserViewModel;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -31,10 +26,9 @@ import java.io.InputStream;
 public class TrainingActivity extends AppCompatActivity {
 
     ActivityTrainingBinding binding;
-    private EditText nameBox, timeBox, descBox;
-    private TextView authorBox;
+    private TextView authorText, nameText, timeText, descText;
+    private Button editButton;
     private ImageView imageView;
-    private Button delButton, pickImage, saveButton;
     private DatabaseAdapter adapter;
     private long trainingId=0;
     private long userId;
@@ -59,90 +53,45 @@ public class TrainingActivity extends AppCompatActivity {
         binding = ActivityTrainingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        nameBox = binding.name;
-        timeBox = binding.time;
-        descBox = binding.desc;
-        authorBox = binding.author;
+        nameText = binding.name;
+        timeText = binding.time;
+        descText = binding.desc;
+        authorText = binding.author;
         imageView = binding.image;
-        delButton = binding.deleteButton;
-        saveButton = binding.saveButton;
+        editButton = binding.editButton;
 
         adapter = new DatabaseAdapter(this);
-        pickImage = binding.pickImage;
-
-        binding.rotateLeft.setOnClickListener( v -> {
-            Bitmap bit = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-            Matrix matrix = new Matrix();
-            matrix.postRotate(-90);
-            bitmap = Bitmap.createBitmap(bit, 0, 0, bit.getWidth(), bit.getHeight(), matrix, true);
-            imageView.setImageBitmap(bitmap);
-        });
-
-        binding.rotateRight.setOnClickListener( v -> {
-            Bitmap bit = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            bitmap = Bitmap.createBitmap(bit, 0, 0, bit.getWidth(), bit.getHeight(), matrix, true);
-            imageView.setImageBitmap(bitmap);
-        });
-
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             trainingId = extras.getLong("id");
-            userId = extras.getLong("user_id");
-        }
-        // если 0, то добавление
-        if (trainingId > 0) {
-            // получаем элемент по id из бд
-            adapter.open();
-            Training training = adapter.getTraining(trainingId);
-            nameBox.setText(training.getName());
-            timeBox.setText(String.valueOf(training.getTime()));
-            descBox.setText(training.getDesc());
-            authorBox.setText(String.valueOf(training.getAuthor()));
-            imageView.setImageBitmap(training.getImage());
-            adapter.close();
-        } else {
-            // скрываем кнопку удаления
-            delButton.setVisibility(View.GONE);
-        }
-        pickImage.setOnClickListener(v -> {
-            mGetContent.launch("image/*");
-        });
-
-        saveButton.setOnClickListener( v -> {
-            String name = nameBox.getText().toString();
-            int time = Integer.parseInt(timeBox.getText().toString());
-            String desc = descBox.getText().toString();
-            System.out.println(userId);
-            long author = userId;
-            if(bitmap==null) {
-                adapter.open();
-                bitmap = adapter.getTraining(trainingId).getImage();
-                adapter.close();
-            }
-            Bitmap image = bitmap;
-            Training training = new Training(trainingId, name, time, desc, image, author);
-
-            adapter.open();
-            if (trainingId > 0) {
-                adapter.updateTraining(training);
+            if (extras.containsKey("user_id")) {
+                userId = extras.getLong("user_id");
+                editButton.setVisibility(View.VISIBLE);
             } else {
-                adapter.insertTraining(training);
+                editButton.setVisibility(View.INVISIBLE);
             }
-            adapter.close();
-            onBackPressed();
-        });
-
-        delButton.setOnClickListener( v -> {
-            adapter.open();
-            adapter.deleteTraining(trainingId);
-            adapter.close();
-            onBackPressed();
+        }
+        editButton.setOnClickListener( v -> {
+            Intent intent = new Intent(this, TrainingEditActivity.class);
+            intent.putExtra("id", trainingId);
+            intent.putExtra("user_id", userId);
+            startActivity(intent);
         });
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.open();
+        Training training = adapter.getTraining(trainingId);
+        nameText.setText(training.getName());
+        timeText.setText(String.valueOf(training.getTime()));
+        descText.setText(training.getDesc());
+        String author = adapter.getUser(training.getAuthor()).getUsername();
+        authorText.setText(author);
+        imageView.setImageBitmap(training.getImage());
+        adapter.close();
+    }
     private void goHome(){
         // переход к главной activity
         Intent intent = new Intent(this, MainActivity.class);

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.TrainingActivity;
+import com.example.myapplication.TrainingEditActivity;
 import com.example.myapplication.adapter.TrainingContentRecyclerAdapter;
 import com.example.myapplication.database.DatabaseAdapter;
 import com.example.myapplication.databinding.FragmentHomeBinding;
@@ -49,7 +50,7 @@ public class HomeFragment extends Fragment implements TrainingContentRecyclerAda
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         Button buttonAddTraining = binding.addTraining;
         buttonAddTraining.setOnClickListener( v -> {
-            Intent intent = new Intent(this.getActivity(), TrainingActivity.class);
+            Intent intent = new Intent(this.getActivity(), TrainingEditActivity.class);
             intent.putExtra("user_id", userViewModel.getLoggedUser().getValue().getId());
             startActivity(intent);
         });
@@ -75,7 +76,9 @@ public class HomeFragment extends Fragment implements TrainingContentRecyclerAda
         if (training != null) {
             Intent intent = new Intent(this.getActivity(), TrainingActivity.class);
             intent.putExtra("id", training.getId());
-            intent.putExtra("user_id", userViewModel.getLoggedUser().getValue().getId());
+            if(userViewModel.getLoggedUser().getValue()!=null) {
+                intent.putExtra("user_id", userViewModel.getLoggedUser().getValue().getId());
+            }
             startActivity(intent);
         }
     }
