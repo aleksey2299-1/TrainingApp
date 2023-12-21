@@ -27,25 +27,11 @@ public class TrainingActivity extends AppCompatActivity {
 
     ActivityTrainingBinding binding;
     private TextView authorText, nameText, timeText, descText;
-    private Button editButton;
+    private Button editButton, startButton;
     private ImageView imageView;
     private DatabaseAdapter adapter;
     private long trainingId=0;
     private long userId;
-    Bitmap bitmap;
-    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
-        @Override
-        public void onActivityResult(Uri uri) {
-            InputStream inputStream = null;
-            try {
-                inputStream = getContentResolver().openInputStream(uri);
-                bitmap = BitmapFactory.decodeStream(inputStream);
-                binding.image.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                Toast.makeText(TrainingActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-            }
-        });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +45,7 @@ public class TrainingActivity extends AppCompatActivity {
         authorText = binding.author;
         imageView = binding.image;
         editButton = binding.editButton;
+        startButton = binding.startButton;
 
         adapter = new DatabaseAdapter(this);
 
@@ -72,6 +59,12 @@ public class TrainingActivity extends AppCompatActivity {
                 editButton.setVisibility(View.INVISIBLE);
             }
         }
+        startButton.setOnClickListener( v -> {
+            Intent intent = new Intent(this, TrainingStartActivity.class);
+            intent.putExtra("id", trainingId);
+            startActivity(intent);
+        });
+
         editButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, TrainingEditActivity.class);
             intent.putExtra("id", trainingId);
