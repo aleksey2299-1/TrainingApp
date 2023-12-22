@@ -1,5 +1,7 @@
 package com.example.myapplication.user;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -9,16 +11,18 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String password;
+    private Bitmap image;
 
 
     public User(long id, String username, String email,
-                String firstName, String lastName, String password) {
+                String firstName, String lastName, String password, Bitmap image) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.image = image;
     }
 
     public long getId() {
@@ -63,6 +67,13 @@ public class User implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }
+
+    public Bitmap getImage() {
+        return image;
     }
 
     @Override

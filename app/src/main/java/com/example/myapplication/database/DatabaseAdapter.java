@@ -35,7 +35,8 @@ public class DatabaseAdapter {
     private Cursor getAllUserEntries(){
         String[] columns = new String[] {DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_USERNAME,
                 DatabaseHelper.COLUMN_EMAIL, DatabaseHelper.COLUMN_FIRST_NAME,
-                DatabaseHelper.COLUMN_LAST_NAME, DatabaseHelper.COLUMN_PASSWORD};
+                DatabaseHelper.COLUMN_LAST_NAME, DatabaseHelper.COLUMN_PASSWORD,
+                DatabaseHelper.COLUMN_IMAGE};
         return database.query(DatabaseHelper.TABLE_USERS, columns, null, null, null, null, null);
     }
 
@@ -43,13 +44,18 @@ public class DatabaseAdapter {
         ArrayList<User> users = new ArrayList<>();
         Cursor cursor = getAllUserEntries();
         while (cursor.moveToNext()){
+            Bitmap image = null;
             int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
             String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME));
             String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
             String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
             String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
             String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
-            users.add(new User(id, username, email, firstName, lastName, password));
+            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            if(blob!=null) {
+                image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+            }
+            users.add(new User(id, username, email, firstName, lastName, password, image));
         }
         cursor.close();
         return users;
@@ -64,12 +70,17 @@ public class DatabaseAdapter {
         String query = String.format("SELECT * FROM %s WHERE %s=?",DatabaseHelper.TABLE_USERS, DatabaseHelper.COLUMN_ID);
         Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(id)});
         if(cursor.moveToFirst()){
+            Bitmap image = null;
             String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME));
             String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
             String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
             String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
             String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
-            user = new User(id, username, email, firstName, lastName, password);
+            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            if(blob!=null) {
+                image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+            }
+            user = new User(id, username, email, firstName, lastName, password, image);
         }
         cursor.close();
         return user;
@@ -80,12 +91,17 @@ public class DatabaseAdapter {
         String query = String.format("SELECT * FROM %s WHERE %s=?",DatabaseHelper.TABLE_USERS, DatabaseHelper.COLUMN_USERNAME);
         Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(username)});
         if(cursor.moveToFirst()){
+            Bitmap image = null;
             Long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
             String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
             String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
             String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
             String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
-            user = new User(id, username, email, firstName, lastName, password);
+            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            if(blob!=null) {
+                image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+            }
+            user = new User(id, username, email, firstName, lastName, password, image);
         }
         cursor.close();
         return user;
@@ -94,6 +110,14 @@ public class DatabaseAdapter {
     public long insertUser(User user){
 
         ContentValues cv = new ContentValues();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        if(user.getImage()!=null) {
+            user.getImage().compress(Bitmap.CompressFormat.PNG, 100, out);
+            byte[] buffer = out.toByteArray();
+            cv.put(DatabaseHelper.COLUMN_IMAGE, buffer);
+        }
+
         cv.put(DatabaseHelper.COLUMN_USERNAME, user.getUsername());
         cv.put(DatabaseHelper.COLUMN_EMAIL, user.getEmail());
         cv.put(DatabaseHelper.COLUMN_FIRST_NAME, user.getFirstName());
@@ -114,6 +138,14 @@ public class DatabaseAdapter {
 
         String whereClause = DatabaseHelper.COLUMN_ID + "=" + user.getId();
         ContentValues cv = new ContentValues();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        if(user.getImage()!=null) {
+            user.getImage().compress(Bitmap.CompressFormat.PNG, 100, out);
+            byte[] buffer = out.toByteArray();
+            cv.put(DatabaseHelper.COLUMN_IMAGE, buffer);
+        }
+
         cv.put(DatabaseHelper.COLUMN_USERNAME, user.getUsername());
         cv.put(DatabaseHelper.COLUMN_EMAIL, user.getEmail());
         cv.put(DatabaseHelper.COLUMN_FIRST_NAME, user.getFirstName());

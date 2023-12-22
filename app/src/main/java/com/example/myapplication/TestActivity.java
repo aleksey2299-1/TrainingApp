@@ -63,7 +63,7 @@ public class TestActivity extends AppCompatActivity {
         String firstName = firstNameBox.getText().toString();
         String lastName = lastNameBox.getText().toString();
         String password = passwordBox.getText().toString();
-        User user = new User(userId, username, email, firstName, lastName, password);
+        User user = new User(userId, username, email, firstName, lastName, password, null);
 
         adapter.open();
         if (userId > 0) {

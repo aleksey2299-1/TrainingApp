@@ -1,8 +1,14 @@
 package com.example.myapplication;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -10,9 +16,13 @@ import com.example.myapplication.database.DatabaseAdapter;
 import com.example.myapplication.databinding.ActivitySignupBinding;
 import com.example.myapplication.user.User;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 public class SignupActivity extends AppCompatActivity {
 
     ActivitySignupBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +46,7 @@ public class SignupActivity extends AppCompatActivity {
                     Boolean checkUserEmail = adapter.checkEmail(email);
                     if(checkUserEmail == false&checkUsername == false){
                         System.out.println("Валидация прошла");
-                        User user = new User(0, username, email, firstName, lastName, password);
+                        User user = new User(0, username, email, firstName, lastName, password, null);
                         adapter.open();
                         adapter.insertUser(user);
                         adapter.close();

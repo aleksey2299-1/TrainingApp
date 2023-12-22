@@ -36,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USERNAME
                 + " TEXT, " + COLUMN_EMAIL + " TEXT, " + COLUMN_FIRST_NAME
                 + " TEXT, " + COLUMN_LAST_NAME + " TEXT, " + COLUMN_PASSWORD
-                + " TEXT);");
+                + " TEXT, " + COLUMN_IMAGE + " TEXT);");
         db.execSQL("CREATE TABLE " + TABLE_TRAININGS + " (" + COLUMN_ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_NAME
                 + " TEXT, " + COLUMN_TIME + " INTEGER, " + COLUMN_DESC
@@ -46,8 +46,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // добавление начальных данных
         db.execSQL("INSERT INTO "+ TABLE_USERS +" (" + COLUMN_USERNAME
                 + ", " + COLUMN_EMAIL + ", " + COLUMN_FIRST_NAME + ", "
-                + COLUMN_LAST_NAME + ", " + COLUMN_PASSWORD
-                + ") VALUES ('tomsmith', 'tomsmith@gmail.com', 'Том', 'Смит', 'password');");
+                + COLUMN_LAST_NAME + ", " + COLUMN_PASSWORD + ", " + COLUMN_IMAGE
+                + ") VALUES ('tomsmith', 'tomsmith@gmail.com', 'Том', 'Смит', 'password', null);");
         db.execSQL("INSERT INTO "+ TABLE_TRAININGS +" (" + COLUMN_NAME
                 + ", " + COLUMN_TIME + ", " + COLUMN_DESC + ", "
                 + COLUMN_IMAGE + ", " + COLUMN_AUTHOR
