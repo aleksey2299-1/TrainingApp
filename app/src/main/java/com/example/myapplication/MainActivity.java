@@ -15,6 +15,7 @@ import com.example.myapplication.user.User;
 import com.example.myapplication.user.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, bar, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
+        navigationView.setCheckedItem(R.id.left_nav_view);
 
         loginButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, LoginActivity.class);
@@ -101,9 +102,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         profileButton.setOnClickListener( v -> {
-            Intent intent = new Intent(this, TestActivity.class);
-            intent.putExtra("id", user.getId());
-            startActivity(intent);
+            drawerLayout.openDrawer(GravityCompat.END);
+//            Intent intent = new Intent(this, TestActivity.class);
+//            intent.putExtra("id", user.getId());
+//            startActivity(intent);
         });
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -112,29 +114,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if(drawerLayout.isDrawerOpen(GravityCompat.END)){
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                } else {
+                    finish();
+                }
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if(user!=null) {
+            adapter.open();
+            user = adapter.getUserByUsername(user.getUsername());
+            adapter.close();
             loginButton.setVisibility(View.INVISIBLE);
             profileButton.setVisibility(View.VISIBLE);
             userViewModel.loggedUser(user);
+            TextView username = findViewById(R.id.user_username);
+            TextView userInfo = findViewById(R.id.user_info);
+            username.setText(user.getUsername());
+            userInfo.setText(user.getFirstName() + " " + user.getLastName());
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }else {
             loginButton.setVisibility(View.VISIBLE);
             profileButton.setVisibility(View.INVISIBLE);
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case 0:
-                Intent intent = new Intent(this, TestActivity.class);
-                startActivity(intent);
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.user_profile) {
+            Intent intent = new Intent(this, TestActivity.class);
+            intent.putExtra("id", user.getId());
+            startActivity(intent);
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.END);
         return true;
     }
+
 }

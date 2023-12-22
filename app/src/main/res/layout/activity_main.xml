@@ -6,16 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
-    tools:openDrawer="end">
-
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/left_nav_view"
-        android:layout_gravity="end"
-        app:headerLayout="@layout/left_nav_header"
-        app:menu="@menu/left_nav_menu" />
-
+    tools:openDrawer="end"
+    tools:context=".MainActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/container"
@@ -33,11 +25,6 @@
                 android:id="@+id/upToolbar"
                 layout="@layout/up_toolbar" />
         </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:id="@+id/left_toolbar" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav"
@@ -61,4 +48,13 @@
             app:navGraph="@navigation/mobile_navigation" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/left_nav_view"
+        android:layout_gravity="end"
+        app:headerLayout="@layout/left_nav_header"
+        app:menu="@menu/left_nav_menu" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -50,6 +50,8 @@ public class TestActivity extends AppCompatActivity {
             lastNameBox.setText(user.getLastName());
             passwordBox.setText(user.getPassword());
             adapter.close();
+            usernameBox.setEnabled(false);
+            emailBox.setEnabled(false);
         } else {
             // скрываем кнопку удаления
             delButton.setVisibility(View.GONE);
