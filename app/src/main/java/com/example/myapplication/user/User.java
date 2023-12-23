@@ -6,11 +6,7 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private long id;
-    private String username;
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String password;
+    private String username, email, firstName, lastName, password;
     private Bitmap image;
 
 

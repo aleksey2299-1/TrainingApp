@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     private ImageButton profileButton;
     private Button loginButton;
+    private TextView userText;
     static final String USERNAME="USERNAME";
 
     public static User user;
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            TextView userText = binding.upToolbar.userText;
             if (result.getResultCode() == Activity.RESULT_OK){
                 System.out.println("OK");
                 Intent intent = result.getData();
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 adapter.open();
                 user = adapter.getUserByUsername(username);
                 adapter.close();
-                userText.setText("Здравствуйте, " + user.getUsername());
             }
         }
     });
@@ -79,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        userText = binding.upToolbar.userText;
 
         adapter = new DatabaseAdapter(this);
         Toolbar bar = binding.upToolbar.upToolbar;
@@ -136,13 +137,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             adapter.close();
             loginButton.setVisibility(View.INVISIBLE);
             profileButton.setVisibility(View.VISIBLE);
+            userText.setVisibility(View.VISIBLE);
             userViewModel.loggedUser(user);
             TextView username = findViewById(R.id.user_username);
             TextView userInfo = findViewById(R.id.user_info);
+            userText.setText("Здравствуйте, " + user.getUsername());
             username.setText(user.getUsername());
             userInfo.setText(user.getFirstName() + " " + user.getLastName());
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }else {
+            userText.setVisibility(View.INVISIBLE);
             loginButton.setVisibility(View.VISIBLE);
             profileButton.setVisibility(View.INVISIBLE);
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -156,6 +160,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(this, TestActivity.class);
             intent.putExtra("id", user.getId());
             startActivity(intent);
+        }
+        if(id == R.id.logout) {
+            user = null;
+            this.onResume();
         }
         drawerLayout.closeDrawer(GravityCompat.END);
         return true;

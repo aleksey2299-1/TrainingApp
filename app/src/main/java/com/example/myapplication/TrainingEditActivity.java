@@ -4,15 +4,22 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.health.connect.datatypes.units.Length;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,25 +27,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.adapter.ExerciseRecyclerAdapter;
+import com.example.myapplication.adapter.TrainingContentRecyclerAdapter;
 import com.example.myapplication.database.DatabaseAdapter;
-import com.example.myapplication.databinding.ActivityTrainingBinding;
 import com.example.myapplication.databinding.ActivityTrainingEditBinding;
+import com.example.myapplication.exercise.Exercise;
 import com.example.myapplication.training.Training;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class TrainingEditActivity extends AppCompatActivity {
 
     ActivityTrainingEditBinding binding;
     private EditText nameBox, timeBox, descBox;
-    private TextView authorBox;
     private ImageView imageView;
     private Button delButton, pickImage, saveButton;
+    private ImageButton addExerciseButton, removeExerciseButton;
     private ImageButton rotateLeft, rotateRight;
     private DatabaseAdapter adapter;
     private long trainingId=0;
     private long userId;
+    private RecyclerView recyclerView;
+    private ArrayList<Exercise> arrayList;
     Bitmap bitmap;
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
         @Override
@@ -63,16 +76,56 @@ public class TrainingEditActivity extends AppCompatActivity {
         nameBox = binding.name;
         timeBox = binding.time;
         descBox = binding.desc;
-        authorBox = binding.author;
         imageView = binding.image;
         delButton = binding.deleteButton;
         saveButton = binding.saveButton;
         rotateLeft = binding.rotateLeft;
         rotateRight = binding.rotateRight;
-
-        adapter = new DatabaseAdapter(this);
+        recyclerView = binding.exerciseList;
+        addExerciseButton = binding.addExercise;
+        removeExerciseButton = binding.removeExercise;
         pickImage = binding.pickImage;
 
+        adapter = new DatabaseAdapter(this);
+        arrayList = new ArrayList<>();
+        arrayList.add(null);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            trainingId = extras.getLong("id");
+            userId = extras.getLong("user_id");
+        }
+        //if 0 --> add, else update
+        if (trainingId > 0) {
+            adapter.open();
+            Training training = adapter.getTraining(trainingId);
+            nameBox.setText(training.getName());
+            timeBox.setText(String.valueOf(training.getTime()));
+            descBox.setText(training.getDesc());
+            imageView.setImageBitmap(training.getImage());
+            adapter.close();
+        } else {
+            delButton.setVisibility(View.GONE);
+        }
+        pickImage.setOnClickListener(v -> mGetContent.launch("image/*"));
+
+        addExerciseButton.setOnClickListener( v -> {
+            arrayList.add(null);
+            this.onResume();
+        });
+
+        removeExerciseButton.setOnClickListener( v -> {
+            arrayList.remove(arrayList.size() - 1);
+            this.onResume();
+        });
+
+        //Image rotate clicks
         rotateLeft.setOnClickListener( v -> {
             Bitmap bit = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
             Matrix matrix = new Matrix();
@@ -89,35 +142,15 @@ public class TrainingEditActivity extends AppCompatActivity {
             imageView.setImageBitmap(bitmap);
         });
 
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            trainingId = extras.getLong("id");
-            userId = extras.getLong("user_id");
-        }
-        // если 0, то добавление
-        if (trainingId > 0) {
-            // получаем элемент по id из бд
-            adapter.open();
-            Training training = adapter.getTraining(trainingId);
-            nameBox.setText(training.getName());
-            timeBox.setText(String.valueOf(training.getTime()));
-            descBox.setText(training.getDesc());
-            authorBox.setText(String.valueOf(training.getAuthor()));
-            imageView.setImageBitmap(training.getImage());
-            adapter.close();
-        } else {
-            // скрываем кнопку удаления
-            delButton.setVisibility(View.GONE);
-        }
-        pickImage.setOnClickListener(v -> mGetContent.launch("image/*"));
-
         saveButton.setOnClickListener( v -> {
             String name = nameBox.getText().toString();
             int time = Integer.parseInt(timeBox.getText().toString());
             String desc = descBox.getText().toString();
             System.out.println(userId);
             long author = userId;
+            if(trainingId==0){
+                bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+            }
             if(bitmap==null) {
                 adapter.open();
                 bitmap = adapter.getTraining(trainingId).getImage();
@@ -149,5 +182,17 @@ public class TrainingEditActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //adapter.open();
+
+        //ArrayList<Exercise> exercises = adapter.getExercises();
+
+        //ArrayAdapter<Exercise> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exercises);
+        recyclerView.setAdapter(new ExerciseRecyclerAdapter(arrayList));
+        //adapter.close();
     }
 }

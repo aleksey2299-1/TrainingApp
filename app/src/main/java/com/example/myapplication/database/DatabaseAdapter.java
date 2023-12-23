@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.myapplication.exercise.Exercise;
 import com.example.myapplication.training.Training;
 import com.example.myapplication.user.User;
 
@@ -269,5 +270,108 @@ public class DatabaseAdapter {
         }else {
             return false;
         }
+    }
+
+    private Cursor getAllExercisesEntries(){
+        String[] columns = new String[] {DatabaseHelper.COLUMN_ID, DatabaseHelper.COLUMN_NAME,
+                DatabaseHelper.COLUMN_DESC, DatabaseHelper.COLUMN_REPS,
+                DatabaseHelper.COLUMN_SETS, DatabaseHelper.COLUMN_TIME_PER_SET,
+                DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS, DatabaseHelper.COLUMN_TRAINING};
+        return database.query(DatabaseHelper.TABLE_EXERCISES, columns, null, null, null, null, null);
+    }
+
+    public ArrayList<Exercise> getExercises(){
+        ArrayList<Exercise> exercises = new ArrayList<>();
+        Cursor cursor = getAllExercisesEntries();
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
+            String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
+            int reps = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_REPS));
+            int sets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_SETS));
+            int timePerSet = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_PER_SET));
+            int relaxTimeBetweenSets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS));
+            int trainingId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TRAINING));
+            exercises.add(new Exercise(id, name, desc, reps, sets, timePerSet, relaxTimeBetweenSets, trainingId));
+        }
+        cursor.close();
+        return exercises;
+    }
+
+    public long getExercisesCount(){
+        return DatabaseUtils.queryNumEntries(database, DatabaseHelper.TABLE_EXERCISES);
+    }
+
+    public Exercise getExercise(long id){
+        Exercise exercise = null;
+        String query = String.format("SELECT * FROM %s WHERE %s=?",DatabaseHelper.TABLE_EXERCISES, DatabaseHelper.COLUMN_ID);
+        Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(id)});
+        if(cursor.moveToFirst()){
+            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
+            String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
+            int reps = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_REPS));
+            int sets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_SETS));
+            int timePerSet = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_PER_SET));
+            int relaxTimeBetweenSets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS));
+            int trainingId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TRAINING));
+            exercise = new Exercise(id, name, desc, reps, sets, timePerSet, relaxTimeBetweenSets, trainingId);
+        }
+        cursor.close();
+        return exercise;
+    }
+
+    public ArrayList<Exercise> getExercisesByTrainingId(int trainingId){
+        ArrayList<Exercise> exercises = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s WHERE %s=?",DatabaseHelper.TABLE_EXERCISES, DatabaseHelper.COLUMN_TRAINING);
+        Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(trainingId)});
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
+            String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
+            int reps = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_REPS));
+            int sets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_SETS));
+            int timePerSet = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_PER_SET));
+            int relaxTimeBetweenSets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS));
+            exercises.add(new Exercise(id, name, desc, reps, sets, timePerSet, relaxTimeBetweenSets, trainingId));
+        }
+        cursor.close();
+        return exercises;
+    }
+
+    public long insertExercise(Exercise exercise){
+
+        ContentValues cv = new ContentValues();
+
+        cv.put(DatabaseHelper.COLUMN_NAME, exercise.getName());
+        cv.put(DatabaseHelper.COLUMN_DESC, exercise.getDesc());
+        cv.put(DatabaseHelper.COLUMN_REPS, exercise.getReps());
+        cv.put(DatabaseHelper.COLUMN_SETS, exercise.getSets());
+        cv.put(DatabaseHelper.COLUMN_TIME_PER_SET, exercise.getTimePerSet());
+        cv.put(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS, exercise.getRelaxTimeBetweenSets());
+        cv.put(DatabaseHelper.COLUMN_TRAINING, exercise.getTrainingId());
+
+        return database.insert(DatabaseHelper.TABLE_EXERCISES, null, cv);
+    }
+
+    public long deleteExercise(long exerciseId){
+
+        String whereClause = "_id = ?";
+        String[] whereArgs = new String[]{String.valueOf(exerciseId)};
+        return database.delete(DatabaseHelper.TABLE_EXERCISES, whereClause, whereArgs);
+    }
+
+    public long updateExercise(Exercise exercise){
+
+        String whereClause = DatabaseHelper.COLUMN_ID + "=" + exercise.getId();
+        ContentValues cv = new ContentValues();
+
+        cv.put(DatabaseHelper.COLUMN_NAME, exercise.getName());
+        cv.put(DatabaseHelper.COLUMN_DESC, exercise.getDesc());
+        cv.put(DatabaseHelper.COLUMN_REPS, exercise.getReps());
+        cv.put(DatabaseHelper.COLUMN_SETS, exercise.getSets());
+        cv.put(DatabaseHelper.COLUMN_TIME_PER_SET, exercise.getTimePerSet());
+        cv.put(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS, exercise.getRelaxTimeBetweenSets());
+        cv.put(DatabaseHelper.COLUMN_TRAINING, exercise.getTrainingId());
+        return database.update(DatabaseHelper.TABLE_EXERCISES, cv, whereClause, null);
     }
 }

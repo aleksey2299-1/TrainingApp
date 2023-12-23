@@ -23,6 +23,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_IMAGE = "image";
     public static final String COLUMN_AUTHOR = "author";
 
+    static final String TABLE_EXERCISES = "exercises";
+    public static final String COLUMN_REPS = "reps";
+    public static final String COLUMN_SETS = "sets";
+    public static final String COLUMN_TIME_PER_SET = "time_per_set";
+    public static final String COLUMN_RELAX_TIME_BETWEEN_SETS = "relax_time_between_sets";
+    public static final String COLUMN_TRAINING = "training";
+
 
 
     public DatabaseHelper(Context context) {
@@ -42,6 +49,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " TEXT, " + COLUMN_TIME + " INTEGER, " + COLUMN_DESC
                 + " TEXT, " + COLUMN_IMAGE + " TEXT, " + COLUMN_AUTHOR
                 + " INTEGER, FOREIGN KEY (" + COLUMN_AUTHOR + ") REFERENCES " + TABLE_USERS
+                + "(" + COLUMN_ID + "))");
+        db.execSQL("CREATE TABLE " + TABLE_EXERCISES + " (" + COLUMN_ID
+                + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_NAME
+                + " TEXT, " + COLUMN_DESC + " TEXT, " + COLUMN_SETS + " INTEGER, "
+                + COLUMN_REPS + " INTEGER, " + COLUMN_TIME_PER_SET + " INTEGER, "
+                + COLUMN_RELAX_TIME_BETWEEN_SETS + " INTEGER, " + COLUMN_TRAINING
+                + " INTEGER, FOREIGN KEY (" + COLUMN_TRAINING + ") REFERENCES " + TABLE_TRAININGS
                 + "(" + COLUMN_ID + "))");
         // добавление начальных данных
         db.execSQL("INSERT INTO "+ TABLE_USERS +" (" + COLUMN_USERNAME

@@ -31,6 +31,7 @@ public class HomeFragment extends Fragment implements TrainingContentRecyclerAda
     private RecyclerView recyclerView;
     private FragmentHomeBinding binding;
     private UserViewModel userViewModel;
+    private Button buttonAddTraining;
     ArrayAdapter<Training> arrayAdapter;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class HomeFragment extends Fragment implements TrainingContentRecyclerAda
         recyclerView.setLayoutManager(linearLayoutManager);
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        Button buttonAddTraining = binding.addTraining;
+        buttonAddTraining = binding.addTraining;
         buttonAddTraining.setOnClickListener( v -> {
             Intent intent = new Intent(this.getActivity(), TrainingEditActivity.class);
             intent.putExtra("user_id", userViewModel.getLoggedUser().getValue().getId());
@@ -60,6 +61,11 @@ public class HomeFragment extends Fragment implements TrainingContentRecyclerAda
     @Override
     public void onResume() {
         super.onResume();
+        if(userViewModel.getLoggedUser().getValue()!=null){
+            buttonAddTraining.setVisibility(View.VISIBLE);
+        } else {
+            buttonAddTraining.setVisibility(View.INVISIBLE);
+        }
         DatabaseAdapter adapter = new DatabaseAdapter(getActivity());
         adapter.open();
 

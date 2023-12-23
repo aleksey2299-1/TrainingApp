@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:weightSum="5">
+
+    <EditText
+        android:id="@+id/exercise_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Введите название упражнения" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <EditText
+            android:id="@+id/exercise_reps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Кол-во повторений"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/exercise_sets"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Кол-во подходов"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <EditText
+            android:id="@+id/exercise_time_per_set"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Время одного повтора"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/exercise_relax_time"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Перерыв между повторами"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/exercise_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Описание"
+        android:inputType="textMultiLine"/>
+
+</LinearLayout>
