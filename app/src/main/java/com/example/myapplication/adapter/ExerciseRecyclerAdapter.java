@@ -2,6 +2,8 @@ package com.example.myapplication.adapter;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,15 +51,88 @@ public class ExerciseRecyclerAdapter extends RecyclerView.Adapter<ExerciseRecycl
     // Создаем View для каждого объекта из массива
     public class ViewHolder extends RecyclerView.ViewHolder {
         public EditText name, desc, reps, sets, timePerSet, relaxTimeBetweenSets;
+        public String nameEdited, descEdited, repsEdited, setsEdited, timePerSetEdited, relaxTimeEdited;
 
         public ViewHolder(View itemView) {
             super(itemView);
             name = (EditText) itemView.findViewById(R.id.exercise_name);
+            name.addTextChangedListener(new TextWatcher() {
+
+                public void afterTextChanged(Editable s) {}
+
+                public void beforeTextChanged(CharSequence s, int start,
+                                              int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    nameEdited = s.toString();
+                }
+            });
             desc = (EditText) itemView.findViewById(R.id.exercise_desc);
+            desc.addTextChangedListener(new TextWatcher() {
+
+                public void afterTextChanged(Editable s) {}
+
+                public void beforeTextChanged(CharSequence s, int start,
+                                              int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    descEdited = s.toString();
+                }
+            });
             reps = (EditText) itemView.findViewById(R.id.exercise_reps);
+            reps.addTextChangedListener(new TextWatcher() {
+
+                public void afterTextChanged(Editable s) {}
+
+                public void beforeTextChanged(CharSequence s, int start,
+                                              int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    repsEdited = s.toString();
+                }
+            });
             sets = (EditText) itemView.findViewById(R.id.exercise_sets);
+            sets.addTextChangedListener(new TextWatcher() {
+
+                public void afterTextChanged(Editable s) {}
+
+                public void beforeTextChanged(CharSequence s, int start,
+                                              int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    setsEdited = s.toString();
+                }
+            });
             timePerSet = (EditText) itemView.findViewById(R.id.exercise_time_per_set);
+            timePerSet.addTextChangedListener(new TextWatcher() {
+
+                public void afterTextChanged(Editable s) {}
+
+                public void beforeTextChanged(CharSequence s, int start,
+                                              int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    timePerSetEdited = s.toString();
+                }
+            });
             relaxTimeBetweenSets = (EditText) itemView.findViewById(R.id.exercise_relax_time);
+            relaxTimeBetweenSets.addTextChangedListener(new TextWatcher() {
+
+                public void afterTextChanged(Editable s) {}
+
+                public void beforeTextChanged(CharSequence s, int start,
+                                              int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    relaxTimeEdited = s.toString();
+                }
+            });
         }
     }
 

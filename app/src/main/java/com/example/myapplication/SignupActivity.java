@@ -51,8 +51,7 @@ public class SignupActivity extends AppCompatActivity {
                         adapter.insertUser(user);
                         adapter.close();
                         Toast.makeText(SignupActivity.this, "Signup Successfully!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-                        startActivity(intent);
+                        finish();
                     }
                     else{
                         Toast.makeText(SignupActivity.this, "User already exists! Please login", Toast.LENGTH_SHORT).show();

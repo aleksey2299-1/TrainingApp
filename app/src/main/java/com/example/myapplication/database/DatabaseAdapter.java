@@ -320,7 +320,7 @@ public class DatabaseAdapter {
         return exercise;
     }
 
-    public ArrayList<Exercise> getExercisesByTrainingId(int trainingId){
+    public ArrayList<Exercise> getExercisesByTrainingId(long trainingId){
         ArrayList<Exercise> exercises = new ArrayList<>();
         String query = String.format("SELECT * FROM %s WHERE %s=?",DatabaseHelper.TABLE_EXERCISES, DatabaseHelper.COLUMN_TRAINING);
         Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(trainingId)});

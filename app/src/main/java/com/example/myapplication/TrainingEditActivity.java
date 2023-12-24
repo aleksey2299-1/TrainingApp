@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.health.connect.datatypes.units.Length;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.adapter.CreatedExerciseRecyclerAdapter;
 import com.example.myapplication.adapter.ExerciseRecyclerAdapter;
 import com.example.myapplication.adapter.TrainingContentRecyclerAdapter;
 import com.example.myapplication.database.DatabaseAdapter;
@@ -45,13 +47,12 @@ public class TrainingEditActivity extends AppCompatActivity {
     private EditText nameBox, timeBox, descBox;
     private ImageView imageView;
     private Button delButton, pickImage, saveButton;
-    private ImageButton addExerciseButton, removeExerciseButton;
-    private ImageButton rotateLeft, rotateRight;
+    private ImageButton addExerciseButton, removeExerciseButton, rotateLeft, rotateRight;
     private DatabaseAdapter adapter;
-    private long trainingId=0;
+    private long trainingId = 0;
     private long userId;
-    private RecyclerView recyclerView;
-    private ArrayList<Exercise> arrayList;
+    private RecyclerView recyclerView, createdExerciseRecyclerView;
+    private ArrayList<Exercise> arrayList, createdExerciseArrayList;
     Bitmap bitmap;
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
         @Override
@@ -82,19 +83,25 @@ public class TrainingEditActivity extends AppCompatActivity {
         rotateLeft = binding.rotateLeft;
         rotateRight = binding.rotateRight;
         recyclerView = binding.exerciseList;
+        createdExerciseRecyclerView = binding.createdExerciseList;
         addExerciseButton = binding.addExercise;
         removeExerciseButton = binding.removeExercise;
         pickImage = binding.pickImage;
 
         adapter = new DatabaseAdapter(this);
         arrayList = new ArrayList<>();
-        arrayList.add(null);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        LinearLayoutManager linearLayoutManagerForCreatedExercises = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        DividerItemDecoration dividerItemDecoration1 = new DividerItemDecoration(createdExerciseRecyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        createdExerciseRecyclerView.addItemDecoration(dividerItemDecoration1);
+        createdExerciseRecyclerView.setLayoutManager(linearLayoutManagerForCreatedExercises);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -112,6 +119,7 @@ public class TrainingEditActivity extends AppCompatActivity {
             adapter.close();
         } else {
             delButton.setVisibility(View.GONE);
+            arrayList.add(null);
         }
         pickImage.setOnClickListener(v -> mGetContent.launch("image/*"));
 
@@ -121,11 +129,12 @@ public class TrainingEditActivity extends AppCompatActivity {
         });
 
         removeExerciseButton.setOnClickListener( v -> {
-            arrayList.remove(arrayList.size() - 1);
+            int lastIndex = arrayList.size() - 1;
+            arrayList.remove(lastIndex);
             this.onResume();
         });
 
-        //Image rotate clicks
+        //Image rotate click listeners
         rotateLeft.setOnClickListener( v -> {
             Bitmap bit = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
             Matrix matrix = new Matrix();
@@ -163,8 +172,22 @@ public class TrainingEditActivity extends AppCompatActivity {
             if (trainingId > 0) {
                 adapter.updateTraining(training);
             } else {
-                adapter.insertTraining(training);
+                trainingId = adapter.insertTraining(training);
             }
+            //add exercises
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                View view = recyclerView.getLayoutManager().findViewByPosition(i);
+                ExerciseRecyclerAdapter.ViewHolder viewHolder = (ExerciseRecyclerAdapter.ViewHolder) recyclerView.getChildViewHolder(view);
+                String nameEdited = viewHolder.nameEdited;
+                String descEdited = viewHolder.descEdited;
+                int repsEdited = Integer.parseInt(viewHolder.repsEdited);
+                int setsEdited = Integer.parseInt(viewHolder.setsEdited);
+                int timePerSetEdited = Integer.parseInt(viewHolder.timePerSetEdited);
+                int relaxTimeEdited = Integer.parseInt(viewHolder.relaxTimeEdited);
+                Exercise exercise = new Exercise(0, nameEdited, descEdited, repsEdited, setsEdited, timePerSetEdited, relaxTimeEdited, trainingId);
+                adapter.insertExercise(exercise);
+            }
+
             adapter.close();
             onBackPressed();
         });
@@ -187,12 +210,14 @@ public class TrainingEditActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        //adapter.open();
-
-        //ArrayList<Exercise> exercises = adapter.getExercises();
-
-        //ArrayAdapter<Exercise> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exercises);
+        adapter.open();
+        // add views for created exercises
+        if (trainingId!=0) {
+            createdExerciseArrayList = adapter.getExercisesByTrainingId(trainingId);
+            createdExerciseRecyclerView.setAdapter(new CreatedExerciseRecyclerAdapter(createdExerciseArrayList, this));
+        }
+        // add views for creating exercise
         recyclerView.setAdapter(new ExerciseRecyclerAdapter(arrayList));
-        //adapter.close();
+        adapter.close();
     }
 }
