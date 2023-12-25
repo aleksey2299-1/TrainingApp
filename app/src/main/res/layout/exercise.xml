@@ -22,14 +22,17 @@ android:weightSum="5">
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Кол-во повторений"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:inputType="number"
+            />
 
         <EditText
             android:id="@+id/exercise_sets"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Кол-во подходов"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:inputType="number"/>
 
     </LinearLayout>
 
@@ -44,14 +47,16 @@ android:weightSum="5">
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Время одного повтора"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:inputType="time"/>
 
         <EditText
             android:id="@+id/exercise_relax_time"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Перерыв между повторами"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:inputType="number" />
 
     </LinearLayout>
 

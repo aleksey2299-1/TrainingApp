@@ -18,7 +18,8 @@
             android:id="@+id/time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Введите время тренировки" />
+            android:hint="Введите время тренировки"
+            android:inputType="time"/>
         <EditText
             android:id="@+id/desc"
             android:layout_width="match_parent"

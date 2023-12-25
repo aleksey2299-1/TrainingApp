@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:hint="Кол-во повторений"
             android:layout_weight="1"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/exercise_sets"
@@ -32,7 +32,7 @@
             android:layout_height="match_parent"
             android:hint="Кол-во подходов"
             android:layout_weight="1"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
     </LinearLayout>
 
@@ -48,7 +48,7 @@
             android:layout_height="match_parent"
             android:hint="Время одного повтора"
             android:layout_weight="1"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/exercise_relax_time"
@@ -56,7 +56,7 @@
             android:layout_height="match_parent"
             android:hint="Перерыв между повторами"
             android:layout_weight="1"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
     </LinearLayout>
 
@@ -65,7 +65,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Описание"
-        android:inputType="textMultiLine"
         android:textSize="20dp"/>
 <!--
     <TextView

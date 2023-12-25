@@ -1,5 +1,6 @@
 package com.example.myapplication.database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -46,13 +47,13 @@ public class DatabaseAdapter {
         Cursor cursor = getAllUserEntries();
         while (cursor.moveToNext()){
             Bitmap image = null;
-            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
-            String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME));
-            String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
-            String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
-            String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
-            String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
-            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+            @SuppressLint("Range") String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME));
+            @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
+            @SuppressLint("Range") String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
+            @SuppressLint("Range") String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
+            @SuppressLint("Range") String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
+            @SuppressLint("Range") byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
             if(blob!=null) {
                 image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
             }
@@ -72,12 +73,12 @@ public class DatabaseAdapter {
         Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(id)});
         if(cursor.moveToFirst()){
             Bitmap image = null;
-            String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME));
-            String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
-            String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
-            String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
-            String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
-            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            @SuppressLint("Range") String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME));
+            @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
+            @SuppressLint("Range") String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
+            @SuppressLint("Range") String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
+            @SuppressLint("Range") String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
+            @SuppressLint("Range") byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
             if(blob!=null) {
                 image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
             }
@@ -93,12 +94,12 @@ public class DatabaseAdapter {
         Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(username)});
         if(cursor.moveToFirst()){
             Bitmap image = null;
-            Long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
-            String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
-            String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
-            String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
-            String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
-            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            @SuppressLint("Range") long id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+            @SuppressLint("Range") String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_EMAIL));
+            @SuppressLint("Range") String firstName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_FIRST_NAME));
+            @SuppressLint("Range") String lastName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_NAME));
+            @SuppressLint("Range") String password = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PASSWORD));
+            @SuppressLint("Range") byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
             if(blob!=null) {
                 image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
             }
@@ -167,13 +168,13 @@ public class DatabaseAdapter {
         Cursor cursor = getAllTrainingEntries();
         while (cursor.moveToNext()){
             Bitmap image = null;
-            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
-            int time = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME));
-            String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
-            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
+            @SuppressLint("Range") int time = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME));
+            @SuppressLint("Range") String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
+            @SuppressLint("Range") byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
             image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-            int author = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_AUTHOR));
+            @SuppressLint("Range") int author = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_AUTHOR));
             trainings.add(new Training(id, name, time, desc, image, author));
         }
         cursor.close();
@@ -190,12 +191,12 @@ public class DatabaseAdapter {
         Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(id)});
         if(cursor.moveToFirst()){
             Bitmap image = null;
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
-            int time = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME));
-            String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
-            byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
+            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
+            @SuppressLint("Range") int time = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME));
+            @SuppressLint("Range") String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
+            @SuppressLint("Range") byte[] blob = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.COLUMN_IMAGE));
             image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-            int author = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_AUTHOR));
+            @SuppressLint("Range") int author = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_AUTHOR));
             training = new Training(id, name, time, desc, image, author);
         }
         cursor.close();
@@ -246,30 +247,18 @@ public class DatabaseAdapter {
     public Boolean checkUsername(String username){
         SQLiteDatabase myDatabase = dbHelper.getWritableDatabase();
         Cursor cursor = myDatabase.rawQuery("SELECT * FROM users WHERE username = ?", new String[]{username});
-        if(cursor.getCount() > 0) {
-            return true;
-        }else {
-            return false;
-        }
+        return cursor.getCount() > 0;
     }
     public Boolean checkEmail(String email){
         SQLiteDatabase myDatabase = dbHelper.getWritableDatabase();
         Cursor cursor = myDatabase.rawQuery("SELECT * FROM users WHERE email = ?", new String[]{email});
-        if(cursor.getCount() > 0) {
-            return true;
-        }else {
-            return false;
-        }
+        return cursor.getCount() > 0;
     }
 
     public Boolean checkUsernamePassword(String username, String password){
         SQLiteDatabase myDatabase = dbHelper.getWritableDatabase();
         Cursor cursor = myDatabase.rawQuery("SELECT * FROM users WHERE username = ? AND password = ?", new String[]{username, password});
-        if (cursor.getCount() > 0) {
-            return true;
-        }else {
-            return false;
-        }
+        return cursor.getCount() > 0;
     }
 
     private Cursor getAllExercisesEntries(){
@@ -284,14 +273,14 @@ public class DatabaseAdapter {
         ArrayList<Exercise> exercises = new ArrayList<>();
         Cursor cursor = getAllExercisesEntries();
         while (cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
-            String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
-            int reps = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_REPS));
-            int sets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_SETS));
-            int timePerSet = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_PER_SET));
-            int relaxTimeBetweenSets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS));
-            int trainingId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TRAINING));
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
+            @SuppressLint("Range") String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
+            @SuppressLint("Range") int reps = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_REPS));
+            @SuppressLint("Range") int sets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_SETS));
+            @SuppressLint("Range") int timePerSet = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_PER_SET));
+            @SuppressLint("Range") int relaxTimeBetweenSets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS));
+            @SuppressLint("Range") int trainingId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TRAINING));
             exercises.add(new Exercise(id, name, desc, reps, sets, timePerSet, relaxTimeBetweenSets, trainingId));
         }
         cursor.close();
@@ -307,13 +296,13 @@ public class DatabaseAdapter {
         String query = String.format("SELECT * FROM %s WHERE %s=?",DatabaseHelper.TABLE_EXERCISES, DatabaseHelper.COLUMN_ID);
         Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(id)});
         if(cursor.moveToFirst()){
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
-            String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
-            int reps = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_REPS));
-            int sets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_SETS));
-            int timePerSet = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_PER_SET));
-            int relaxTimeBetweenSets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS));
-            int trainingId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TRAINING));
+            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
+            @SuppressLint("Range") String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
+            @SuppressLint("Range") int reps = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_REPS));
+            @SuppressLint("Range") int sets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_SETS));
+            @SuppressLint("Range") int timePerSet = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_PER_SET));
+            @SuppressLint("Range") int relaxTimeBetweenSets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS));
+            @SuppressLint("Range") int trainingId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TRAINING));
             exercise = new Exercise(id, name, desc, reps, sets, timePerSet, relaxTimeBetweenSets, trainingId);
         }
         cursor.close();
@@ -325,13 +314,13 @@ public class DatabaseAdapter {
         String query = String.format("SELECT * FROM %s WHERE %s=?",DatabaseHelper.TABLE_EXERCISES, DatabaseHelper.COLUMN_TRAINING);
         Cursor cursor = database.rawQuery(query, new String[]{ String.valueOf(trainingId)});
         while (cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
-            String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
-            int reps = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_REPS));
-            int sets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_SETS));
-            int timePerSet = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_PER_SET));
-            int relaxTimeBetweenSets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS));
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME));
+            @SuppressLint("Range") String desc = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESC));
+            @SuppressLint("Range") int reps = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_REPS));
+            @SuppressLint("Range") int sets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_SETS));
+            @SuppressLint("Range") int timePerSet = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_PER_SET));
+            @SuppressLint("Range") int relaxTimeBetweenSets = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_RELAX_TIME_BETWEEN_SETS));
             exercises.add(new Exercise(id, name, desc, reps, sets, timePerSet, relaxTimeBetweenSets, trainingId));
         }
         cursor.close();
