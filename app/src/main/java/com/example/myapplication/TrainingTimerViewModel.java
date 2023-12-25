@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class TrainingTimerViewModel extends ViewModel {
     public ArrayList<Long> mArrayList;
-//    private Thread thread;
+    //    private Thread thread;
 //    private CountDownTimer countDownTimer;
     public MutableLiveData<Boolean> isStarted = new MutableLiveData<Boolean>(false);
     private MutableLiveData<Long> timeLeftMillis = new MutableLiveData<>(-1L);
@@ -46,7 +46,7 @@ public class TrainingTimerViewModel extends ViewModel {
         timerRunnable = new Runnable() {
             @Override
             public void run() {
-                if (timeLeftMillis.getValue()<0) {
+                if (timeLeftMillis.getValue() < 0) {
                     time = mArrayList.get(index);
                     timeLeftMillis = new MutableLiveData<>(time);
                     index++;
@@ -55,7 +55,7 @@ public class TrainingTimerViewModel extends ViewModel {
                 timeLeftMillis.postValue(millis - 1000);
                 float m = (float) millis;
                 float t = (float) time;
-                progress = new MutableLiveData<>((int)(m/t * 100));
+                progress = new MutableLiveData<>((int) (m / t * 100));
                 int seconds = (int) (millis / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
@@ -73,6 +73,7 @@ public class TrainingTimerViewModel extends ViewModel {
         timerHandler.removeCallbacks(timerRunnable);
         isStarted.postValue(false);
     }
+
     public void resetTimer() {
         timeLeftMillis.postValue(-1L);
         progress.postValue(100);
@@ -83,48 +84,4 @@ public class TrainingTimerViewModel extends ViewModel {
         seconds = seconds % 60;
         value.postValue(String.format("%02d:%02d", minutes, seconds));
     }
-
-
-//    public void startTimer() {
-//        timeLeftMillis = new MutableLiveData<Long>(mArrayList.get(index));
-//        countDownTimer = new CountDownTimer(timeLeftMillis.getValue(), 1000) {
-//
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                timeLeftMillis.postValue(millisUntilFinished);
-//                updateCountDownText();
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                timeLeftMillis.postValue(0L);
-//                updateCountDownText();
-//                isStarted.postValue(false);
-//            }
-//        };
-//        index++;
-//        while (index!=mArrayList.size()){
-//            countDownTimer.start();
-//            wait(mArrayList.get(index));
-//            startTimer();
-//        }
-//
-//        isStarted.postValue(true);
-//    }
-//
-//    public void resetTimer(int time) {
-//        timeLeftMillis.postValue((long) time);
-//    }
-//
-//    public void pauseTimer() {
-//        countDownTimer.cancel();
-//        isStarted.postValue(false);
-//    }
-//
-//    public void updateCountDownText() {
-//        int minutes = (int) (timeLeftMillis.getValue() / 1000) / 60;
-//        int seconds = (int) (timeLeftMillis.getValue() / 1000) % 60;
-//        String formattedTime = String.format("%02d:%02d", minutes, seconds);
-//        value.postValue(formattedTime);
-//    }
 }

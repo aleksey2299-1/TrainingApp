@@ -13,7 +13,7 @@
         android:layout_height="215dp"
         android:layout_gravity="center"
         android:indeterminateOnly="false"
-        android:progressDrawable="@drawable/timer_progress_circular" />
+        android:progressDrawable="@drawable/timer_progress_circular_active" />
 
     <TextView
         android:id="@+id/name"

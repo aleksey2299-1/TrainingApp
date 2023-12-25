@@ -10,4 +10,7 @@
     <color name="spring_green">#00FF7F</color>
     <color name="green">#008000</color>
     <color name="dark_green">#006400</color>
+    <color name="aqua">#00FFFF</color>
+    <color name="deep_sky_blue">#00BFFF</color>
+    <color name="steel_blue">#4682B4</color>
 </resources>

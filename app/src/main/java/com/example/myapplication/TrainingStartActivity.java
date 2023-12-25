@@ -63,7 +63,13 @@ public class TrainingStartActivity extends AppCompatActivity {
 
         timerViewModel.getValue().observe(this, value -> {
             timeView.setText(value);
-            System.out.println(timerViewModel.progress.getValue());
+            if (timerViewModel.index > 1&&timerViewModel.progress.getValue() == 100) {
+                if (timerViewModel.index % 2 == 0) {
+                    timerProgressCircular.setProgressDrawable(getDrawable(R.drawable.timer_progress_circular_relax));
+                } else {
+                    timerProgressCircular.setProgressDrawable(getDrawable(R.drawable.timer_progress_circular_active));
+                }
+            }
             timerProgressCircular.setProgress(timerViewModel.progress.getValue(), true);
         });
 
