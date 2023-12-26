@@ -26,10 +26,6 @@ public class TrainingTimerViewModel extends ViewModel {
     private Handler timerHandler;
     private Runnable timerRunnable;
 
-    public long getTimeLeft() {
-        return timeLeftMillis.getValue();
-    }
-
     public LiveData<String> getValue() {
         if (value == null) {
             long millis = mArrayList.get(index);
@@ -60,8 +56,13 @@ public class TrainingTimerViewModel extends ViewModel {
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
                 value.postValue(String.format("%02d:%02d", minutes, seconds));
-
-                timerHandler.postDelayed(this, 1000);
+                if (index < mArrayList.size()||timeLeftMillis.getValue() > 0) {
+                    timerHandler.postDelayed(this, 1000);
+                } else {
+                    progress = new MutableLiveData<>(100);
+                    value.postValue("Done!");
+                    isStarted.postValue(false);
+                }
             }
         };
         timerHandler = new Handler(Looper.getMainLooper());
@@ -74,10 +75,15 @@ public class TrainingTimerViewModel extends ViewModel {
         isStarted.postValue(false);
     }
 
-    public void resetTimer() {
+    public void resetFinishedTimer() {
+        pauseTimer();
         timeLeftMillis.postValue(-1L);
         progress.postValue(100);
         index = 0;
+    }
+
+    public void resetTimer() {
+        resetFinishedTimer();
         long millis = mArrayList.get(index);
         int seconds = (int) (millis / 1000);
         int minutes = seconds / 60;
