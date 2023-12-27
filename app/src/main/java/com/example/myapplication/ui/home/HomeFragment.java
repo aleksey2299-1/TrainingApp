@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import com.example.myapplication.adapter.TrainingContentRecyclerAdapter;
 import com.example.myapplication.database.DatabaseAdapter;
 import com.example.myapplication.databinding.FragmentHomeBinding;
 import com.example.myapplication.training.Training;
+import com.example.myapplication.user.User;
 import com.example.myapplication.user.UserViewModel;
 
 import java.util.ArrayList;

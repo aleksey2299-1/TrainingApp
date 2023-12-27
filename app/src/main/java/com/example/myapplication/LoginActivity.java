@@ -29,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
                 if(checkCredentials == true){
                     Toast.makeText(LoginActivity.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
                     Intent intent  = new Intent();
-                    System.out.println(username);
                     intent.putExtra(MainActivity.USERNAME, username);
                     setResult(RESULT_OK, intent);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

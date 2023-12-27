@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.myapplication.database.DatabaseAdapter;
+import com.example.myapplication.ui.home.HomeFragment;
+import com.example.myapplication.ui.profile.ProfileFragment;
 import com.example.myapplication.user.User;
 import com.example.myapplication.user.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -20,12 +22,14 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NavigationRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -36,6 +40,8 @@ import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private ActivityMainBinding binding;
@@ -48,11 +54,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static User user;
     private DatabaseAdapter adapter;
     private UserViewModel userViewModel;
+    BottomNavigationView navView;
+    NavController navController;
+    private String currentMenu;
     ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK){
-                System.out.println("OK");
                 Intent intent = result.getData();
                 String username = intent.getStringExtra(USERNAME);
                 adapter.open();
@@ -85,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar bar = binding.upToolbar.upToolbar;
         profileButton = binding.upToolbar.profileButton;
         loginButton = binding.upToolbar.login;
-        BottomNavigationView navView = findViewById(R.id.bottom_nav);
+        navView = findViewById(R.id.bottom_nav);
         setSupportActionBar(bar);
 
         drawerLayout = binding.drawerLayout;
@@ -110,11 +118,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+//        NavigationUI.setupWithNavController(navView, navController);
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -145,7 +153,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             username.setText(user.getUsername());
             userInfo.setText(user.getFirstName() + " " + user.getLastName());
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            //set bar with favorites
+            if (currentMenu!="logged") {
+                navView.getMenu().clear();
+                navView.inflateMenu(R.menu.bottom_nav_menu_for_user);
+                NavigationUI.setupWithNavController(navView, navController);
+                currentMenu = "logged";
+            }
         }else {
+            //set bar without favorites
+            if (currentMenu!="not_logged") {
+                navView.getMenu().clear();
+                navView.inflateMenu(R.menu.bottom_nav_menu);
+                NavigationUI.setupWithNavController(navView, navController);
+                currentMenu = "not_logged";
+            }
+
             userText.setVisibility(View.INVISIBLE);
             loginButton.setVisibility(View.VISIBLE);
             profileButton.setVisibility(View.INVISIBLE);
@@ -163,7 +186,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if(id == R.id.logout) {
             user = null;
+            userViewModel.loggedUser(null);
             this.onResume();
+            navController.navigate(R.id.navigation_home);
         }
         drawerLayout.closeDrawer(GravityCompat.END);
         return true;

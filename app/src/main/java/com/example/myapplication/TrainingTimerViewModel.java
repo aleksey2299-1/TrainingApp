@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -8,15 +7,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class TrainingTimerViewModel extends ViewModel {
     public ArrayList<Long> mArrayList;
-    //    private Thread thread;
-//    private CountDownTimer countDownTimer;
     public MutableLiveData<Boolean> isStarted = new MutableLiveData<Boolean>(false);
     private MutableLiveData<Long> timeLeftMillis = new MutableLiveData<>(-1L);
     MutableLiveData<Integer> progress = new MutableLiveData<>(100);

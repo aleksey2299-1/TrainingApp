@@ -29,6 +29,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TIME_PER_SET = "time_per_set";
     public static final String COLUMN_RELAX_TIME_BETWEEN_SETS = "relax_time_between_sets";
     public static final String COLUMN_TRAINING = "training";
+    static final String TABLE_FAVORITE_TRAINING_BY_USER = "favorite_training_by_user";
+    public static final String COLUMN_USER = "user";
 
 
 
@@ -57,6 +59,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_RELAX_TIME_BETWEEN_SETS + " INTEGER, " + COLUMN_TRAINING
                 + " INTEGER, FOREIGN KEY (" + COLUMN_TRAINING + ") REFERENCES " + TABLE_TRAININGS
                 + "(" + COLUMN_ID + "))");
+        db.execSQL("CREATE TABLE " + TABLE_FAVORITE_TRAINING_BY_USER + " (" + COLUMN_ID
+                + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER
+                + " INTEGER, " + COLUMN_TRAINING + " INTEGER, FOREIGN KEY (" + COLUMN_USER
+                + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_ID + "), FOREIGN KEY ("
+                + COLUMN_TRAINING + ") REFERENCES " + TABLE_TRAININGS + "(" + COLUMN_ID + "))");
         // добавление начальных данных
         db.execSQL("INSERT INTO "+ TABLE_USERS +" (" + COLUMN_USERNAME
                 + ", " + COLUMN_EMAIL + ", " + COLUMN_FIRST_NAME + ", "

@@ -48,6 +48,14 @@
         app:layout_constraintTop_toBottomOf="@id/editButton"
         app:layout_constraintLeft_toRightOf="@id/image"
         app:layout_constraintRight_toRightOf="parent" />
+    <ImageButton
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/star_border_yellow"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@id/startButton"
+        app:layout_constraintRight_toRightOf="parent" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
